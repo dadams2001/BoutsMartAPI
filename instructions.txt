@@ -1,0 +1,5 @@
+To start venv, enter:
+$ .  venv/bin/activate
+
+To close venv, enter:
+$ deactivate
