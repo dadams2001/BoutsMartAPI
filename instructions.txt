@@ -1,11 +1,13 @@
-To start venv, enter:
-$ .  venv/bin/activate
+Instructions:
+1. To start venv, enter:
+    $ .  ..venv/bin/activate
 
-To close venv, enter:
-$ deactivate
+2. To start flask server, enter:
+    $ ./start_hello.sh
 
-To start flask server, enter:
-$ ./start_hello.sh
+3. To kill flask server, enter:
+    ^C
 
-To kill flask server, enter:
-^C
+4. To close venv, enter:
+    $ deactivate
+
