@@ -1,6 +1,6 @@
 Instructions:
 1. To start venv, enter:
-    $ .  ..venv/bin/activate
+    $ .  venv/bin/activate
 
 2. To start flask server, enter:
     $ ./start_hello.sh
