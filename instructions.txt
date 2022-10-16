@@ -5,6 +5,8 @@ Instructions:
 2. To start flask server, enter:
     $ ./start_hello.sh
 
+    NOTE: If after running ./start_hello.sh you get an error message saying "port 5000 in use", edit start_hello.sh to say "flask app hello run -h 0.0.0.0 -p 5001".  Use 5002, 5003 etc, until you find an open port.  Don't go above 5010 tho, apparently Mad Dog didn't open those 
+
 3. To kill flask server, enter:
     ^C
 
