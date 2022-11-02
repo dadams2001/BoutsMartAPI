@@ -15,7 +15,7 @@ def return_all():
     with connection:
         with connection.cursor() as cursor:
             # Read all records
-            cursor.execute("select * from BoutsMart")
+            cursor.execute("select * from Merch")
             result = cursor.fetchall()
 
 
