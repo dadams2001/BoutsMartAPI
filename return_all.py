@@ -23,8 +23,8 @@ def return_all():
 
 
     response_body = {
-        "flaskStatusMessage": "Success!",
-        "flaskMessage": result
+        "status" : "success",
+        "data": result
     }
 
     return response_body
