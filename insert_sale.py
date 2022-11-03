@@ -14,27 +14,29 @@ def return_all():
                                 database='msilvest')
     with connection:
         with connection.cursor() as cursor:
-            New_Sale_ID = 1
-            Sale_Item_ID = 111001
-            Sale_Size = 'S'
+            Sale_Item_ID = 111003
+            Sale_Size = 'L'
             Sale_Price = 30.00
             Quantity_Sold = 1
 
-            # Insert new sale
-            sql_sale = f"INSERT INTO Sale_Trial (Sale_ID, Item_ID, Size, Price, Quantity_Sold) VALUES ('{New_Sale_ID}', '{Sale_Item_ID}', '{Sale_Size}', '{Sale_Price}', '{Quantity_Sold}')"
-            # cursor.execute("INSERT INTO Sale_Trial (Sale_ID, Item_ID, Size, Price, Quantity_Sold) VALUES (1, 111001, 'S', 30.00, 1)");
+            # Get the Current Max Sale_ID
+            query = "SELECT max(Sale_ID) FROM Sale_Trial"
+            cursor.execute(query);
+            Max_Sale_ID = cursor.fetchone()
+
+            # Insert New Sale Into Sale Database
+            sql_sale = f"INSERT INTO Sale_Trial (Sale_ID, Item_ID, Size, Price, Quantity_Sold) VALUES ('{Max_Sale_ID[0] + 1}', '{Sale_Item_ID}', '{Sale_Size}', '{Sale_Price}', '{Quantity_Sold}')"
             cursor.execute(sql_sale); 
        
-            # Update Merch Quantity
+            # Update Merch Quantity Into Merch Database
             sql_quantity = f"UPDATE Merch_Trial SET Quantity = Quantity - '{Quantity_Sold}' WHERE Item_ID = '{Sale_Item_ID}' AND Size = '{Sale_Size}'"
-               
             cursor.execute(sql_quantity);
 
         connection.commit()
 
     response_body = {
         "flaskStatusMessage": "Success!",
-        "flaskMessage": "we did it!"
+        "flaskMessage": Max_Sale_ID
     }
 
     return response_body
