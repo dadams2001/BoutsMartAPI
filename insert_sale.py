@@ -5,15 +5,20 @@ import pymysql
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/insert_sale")
-def return_all():
+@app.route("/insert_sale", methods = ['POST'])
+def insert_sale():
+
+    response = request 
+
     # Connect to the database
+    '''
     connection = pymysql.connect(host='localhost',
                                 user='msilvest',
                                 password='pwpwpwpw',
                                 database='msilvest')
     with connection:
         with connection.cursor() as cursor:
+            
             Sale_Item_ID = 111003
             Sale_Size = 'L'
             Sale_Price = 30.00
@@ -33,10 +38,10 @@ def return_all():
             cursor.execute(sql_quantity);
 
         connection.commit()
-
+    '''
     response_body = {
         "flaskStatusMessage": "Success!",
-        "flaskMessage": Max_Sale_ID
+        "flaskMessage": response
     }
 
     return response_body
