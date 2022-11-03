@@ -14,15 +14,16 @@ def return_all():
                                 database='msilvest')
     with connection:
         with connection.cursor() as cursor:
-            # Sale_ID = 1
-            # Item_ID = 111001
-            # Price = 30.00
-            # Quantity_Sold = 1
+            Sale_ID = 1
+            Item_ID = 111001
+            Size = 'S'
+            Price = 30.00
+            Quantity_Sold = 1
 
             # Insert new record
-            # sql = f"insert into 'Sale_Trial' ('Sale_ID', 'Item_ID', 'Size', 'Price', 'Quantity_Sold') VALUES ('{Sale_ID}', '{Item_ID}', '{Size}', '{Price}', '{Quantity_Sold}')"
-            cursor.execute("INSERT INTO Sale_Trial (Sale_ID, Item_ID, Size, Price, Quantity_Sold) VALUES (1, 111001, 'S', 30.00, 1)");
-            # cursor.execute(sql); 
+            sql = f"INSERT INTO Sale_Trial (Sale_ID, Item_ID, Size, Price, Quantity_Sold) VALUES ('{Sale_ID}', '{Item_ID}', '{Size}', '{Price}', '{Quantity_Sold}')"
+            # cursor.execute("INSERT INTO Sale_Trial (Sale_ID, Item_ID, Size, Price, Quantity_Sold) VALUES (1, 111001, 'S', 30.00, 1)");
+            cursor.execute(sql); 
         
         connection.commit()
 
