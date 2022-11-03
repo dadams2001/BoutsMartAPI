@@ -27,7 +27,7 @@ def return_all():
        
             # Update Merch Quantity
             sql_quantity = f"UPDATE Merch_Trial SET Quantity = Quantity - '{Quantity_Sold}' WHERE Item_ID = '{Sale_Item_ID}' AND Size = '{Sale_Size}'"
-            
+               
             cursor.execute(sql_quantity);
 
         connection.commit()
