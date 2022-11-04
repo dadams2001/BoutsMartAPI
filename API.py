@@ -1,10 +1,15 @@
 from flask import Flask
 from flask import request
+from flask import render_template
 from flask_cors import CORS
 import pymysql
+import os
 
 app = Flask(__name__)
 CORS(app)
+
+picFolder = os.path.join('static', 'merchPics')
+app.config['UPLOAD FOLDER'] = picFolder
 
 @app.route("/")
 def hello_world():
@@ -18,6 +23,12 @@ def hello_world():
 
     return response_body
 
+@app.route("/pics/<pic_id>")
+def pics(pic_id):
+
+    pic1 = os.path.join(app.config['UPLOAD FOLDER'], f'{pic_id}.png')
+    pic1 = os.path.join("..", pic1)
+    return render_template("pics.html", user_image=pic1)
 
 @app.route("/return_all")
 def return_all():
@@ -39,7 +50,6 @@ def return_all():
     }
 
     return response_body
-
 
 @app.route("/insert_sale",methods=['GET','POST'])
 def insert_sale():
@@ -75,6 +85,10 @@ def insert_sale():
 
             response = "we did it chief"
             connection.commit()
+
+
+            
+
     elif (request.method=="GET"):
         response="we got it"
 
