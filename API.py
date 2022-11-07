@@ -71,23 +71,20 @@ def insert_sale():
                 Quantity_Sold = vars["quantity"]
 
                 # Get the Current Max Sale_ID
-                query = "SELECT max(Sale_ID) FROM Sale_Trial"
+                query = "SELECT max(SALE_ID) FROM Sales"
                 cursor.execute(query)
                 Max_Sale_ID = cursor.fetchone()
 
                 # Insert New Sale Into Sale Database
-                sql_sale = f"INSERT INTO Sale_Trial (Sale_ID, Item_ID, Size, Price, Quantity_Sold) VALUES ('{Max_Sale_ID[0] + 1}', '{Sale_Item_ID}', '{Sale_Size}', '{Sale_Price}', '{Quantity_Sold}')"
+                sql_sale = f"INSERT INTO Sales (SALE_ID, ITEM_ID, SIZE, PRICE, QUANTITY_SOLD) VALUES ('{Max_Sale_ID[0] + 1}', '{Sale_Item_ID}', '{Sale_Size}', '{Sale_Price}', '{Quantity_Sold}')"
                 cursor.execute(sql_sale)
         
                 # Update Merch Quantity Into Merch Database
-                sql_quantity = f"UPDATE Merch_Trial SET Quantity = Quantity - '{Quantity_Sold}' WHERE Item_ID = '{Sale_Item_ID}' AND Size = '{Sale_Size}'"
+                sql_quantity = f"UPDATE Merch SET QUANTITY = QUANTITY - '{Quantity_Sold}' WHERE ITEM_ID = '{Sale_Item_ID}' AND SIZE = '{Sale_Size}'"
                 cursor.execute(sql_quantity)
 
             response = "we did it chief"
             connection.commit()
-
-
-            
 
     elif (request.method=="GET"):
         response="we got it"
