@@ -99,4 +99,37 @@ def insert_sale():
 
     return response_body
 
-# @app.route("/analytics")
+@app.route("/analytics")
+def return_data():
+    # Connect to the database
+    connection = pymysql.connect(host='localhost',
+                                user='msilvest',
+                                password='pwpwpwpw',
+                                database='msilvest')
+    with connection:
+        with connection.cursor() as cursor:
+            # Bar Chart 1 (How much money each merch item made across every night)
+            cursor.execute("SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;")
+            result1 = cursor.fetchall()
+            
+            # Bar Chart 2 (How much money each merch item made in night 1)
+            cursor.execute("SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-7' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;")
+            result2 = cursor.fetchall()
+            
+            # Bar Chart 3 (How much money each merch item made in night 2)
+            cursor.execute("SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-10' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;")
+            result3 = cursor.fetchall()
+            
+            # Bar Chart 4 (How much money each merch item made in night 3)
+            cursor.execute("SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-16' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;")
+            result4 = cursor.fetchall()
+
+    response_body = {
+        "status" : "success",
+        "bar chart data1": result1,
+        "bar chart data2": result2,
+        "bar chart data3": result3,
+        "bar chart data4": result4,
+    }
+
+    return response_body
