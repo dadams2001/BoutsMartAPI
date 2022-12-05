@@ -4,6 +4,7 @@ from flask import render_template
 from flask_cors import CORS
 import pymysql
 import os
+import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -69,6 +70,7 @@ def insert_sale():
                 Sale_Size = vars["size"]
                 Sale_Price = vars["price"]
                 Quantity_Sold = vars["quantity"]
+                Date_Sold = datetime.date.today()
 
                 # Get the Current Max Sale_ID
                 query = "SELECT max(SALE_ID) FROM Sales"
@@ -76,7 +78,7 @@ def insert_sale():
                 Max_Sale_ID = cursor.fetchone()
 
                 # Insert New Sale Into Sale Database
-                sql_sale = f"INSERT INTO Sales (SALE_ID, ITEM_ID, SIZE, PRICE, QUANTITY_SOLD) VALUES ('{Max_Sale_ID[0] + 1}', '{Sale_Item_ID}', '{Sale_Size}', '{Sale_Price}', '{Quantity_Sold}')"
+                sql_sale = f"INSERT INTO Sales (SALE_ID, ITEM_ID, SIZE, PRICE, QUANTITY_SOLD, DATE_SOLD) VALUES ('{Max_Sale_ID[0] + 1}', '{Sale_Item_ID}', '{Sale_Size}', '{Sale_Price}', '{Quantity_Sold}', '{Date_Sold}')" 
                 cursor.execute(sql_sale)
         
                 # Update Merch Quantity Into Merch Database
@@ -96,3 +98,5 @@ def insert_sale():
     }
 
     return response_body
+
+# @app.route("/analytics")
