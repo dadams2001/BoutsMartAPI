@@ -99,6 +99,56 @@ def insert_sale():
 
     return response_body
 
+@app.route("/add_item", methods=['GET','POST'])
+def AddItem():
+    
+    if (request.method=="POST"):
+        vars=request.get_json()
+
+        # Connect to the database 
+        connection = pymysql.connect(host='localhost',
+                                user='msilvest',
+                                password='pwpwpwpw',
+                                database='msilvest')
+        
+        with connection.cursor() as cursor:
+            New_Item_ID = vars["prod_id"]
+            New_Item_Size = vars["size"]
+            New_Item_Cat = vars["category"]
+            New_Item_Price = vars["price"]
+            New_Item_Sub_Cat = vars["sub_cat"]
+            New_Item_Disc = vars["disc"]
+            New_Item_Color = vars["color"]
+            New_Item_Gender = vars["gender"]
+            New_Item_Quantity = vars["quantity"]
+            New_Item_Box = vars["box"]
+            New_Item_Shelf = vars["shelf"]
+            New_Item_Location = vars["location"]
+
+            # get the current max item number
+            query = "SELECT max(ITEM_ID) FROM Merch_Test"
+            cursor.execute(query)
+            Max_Item_ID = cursor.fetchone()
+
+            # Insert New Item Into Sale Database
+            sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
+            cursor.execute(sql_add_item)
+        
+        response = "we did it chief"
+        connection.commit()
+    
+    elif (request.method=="GET"):
+        response="we got it"
+
+   
+    response_body = {
+        "flaskStatusMessage": "Success!",
+        "flaskMessage": response
+    }
+
+    return response_body 
+
+
 @app.route("/analytics")
 def return_data():
     # Connect to the database
