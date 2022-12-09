@@ -41,7 +41,8 @@ def return_all():
     with connection:
         with connection.cursor() as cursor:
             # Read all records
-            cursor.execute("select * from Merch")
+            qry = "select * from Merch"
+            cursor.execute(qry)
             result = cursor.fetchall()
 
 
@@ -99,6 +100,12 @@ def insert_sale():
 
     return response_body
 
+def convert_data(data_list):
+    keys = ['name', 'value']
+
+    data_objs = [dict(zip(keys, sublst)) for sublst in data_list]
+    return data_objs
+
 @app.route("/analytics")
 def return_data():
     # Connect to the database
@@ -109,130 +116,180 @@ def return_data():
     with connection:
         with connection.cursor() as cursor:
             # Bar Chart 1 (How much money each merch item made across every night)
-            cursor.execute("SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;")
+            qry1="SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;"
+            cursor.execute(qry1)
             result1 = cursor.fetchall()
+            new_result1=convert_data(result1)
             
             # Bar Chart 2 (How much money each merch item made in night 1)
-            cursor.execute("SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-7' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;")
+            qry2="SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-7' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;"
+            cursor.execute(qry2)
             result2 = cursor.fetchall()
+            new_result2=convert_data(result2)
             
             # Bar Chart 3 (How much money each merch item made in night 2)
-            cursor.execute("SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-10' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;")
+            qry3="SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-10' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;"
+            cursor.execute(qry3)
             result3 = cursor.fetchall()
+            new_result3=convert_data(result3)
             
             # Bar Chart 4 (How much money each merch item made in night 3)
-            cursor.execute("SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-16' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;")
+            qry4="SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-16' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;"
+            cursor.execute(qry4)
             result4 = cursor.fetchall()
+            new_result4=convert_data(result4)
             
             # Pie Chart 1 (How much money each merch item made across every night)
-            cursor.execute("SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales)*100 as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;")
+            qry5="SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales)*100 as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;"
+            cursor.execute(qry5)
             result5 = cursor.fetchall()
+            new_result5=convert_data(result5)
             
             # Pie Chart 2 (How much money each merch item made in night 1)
-            cursor.execute("SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-7')*100 as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-7' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;")
+            qry6="SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-7')*100 as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-7' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;"
+            cursor.execute(qry6)
             result6 = cursor.fetchall()
+            new_result6=convert_data(result6)
             
             # Pie Chart 3 (How much money each merch item made in night 2)
-            cursor.execute("SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-10')*100 as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-10' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;")
+            qry7="SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-10')*100 as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-10' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;"
+            cursor.execute(qry7)
             result7 = cursor.fetchall()
+            new_result7=convert_data(result7)
             
             # Pie Chart 4 (How much money each merch item made in night 3)
-            cursor.execute("SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-16')*100 as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-16' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;")
+            qry8="SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-16')*100 as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-16' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;"
+            cursor.execute(qry8)
             result8 = cursor.fetchall()
+            new_result8=convert_data(result8)
             
             # Gender Bar Chart 1 (How much money each merch item made across every night)
-            cursor.execute("SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE) New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC;")
+            qry9="SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE) New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC;"
+            cursor.execute(qry9)
             result9 = cursor.fetchall()
+            new_result9=convert_data(result9)
             
             # Gender Bar Chart 2 (How much money each merch item made in night 1)
-            cursor.execute("SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-7') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC;")
+            qry10="SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-7') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC;"
+            cursor.execute(qry10)
             result10 = cursor.fetchall()
+            new_result10=convert_data(result10)
             
             # Gender Bar Chart 3 (How much money each merch item made in night 2)
-            cursor.execute("SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-10') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC;")
+            qry11="SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-10') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC;"
+            cursor.execute(qry11)
             result11 = cursor.fetchall()
+            new_result11=convert_data(result11)
             
             # Gender Bar Chart 4 (How much money each merch item made in night 3)
-            cursor.execute("SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-16') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC;")
+            qry12="SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-16') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC;"
+            cursor.execute(qry12)
             result12 = cursor.fetchall()
+            new_result12=convert_data(result12)
             
             # Gender Pie Chart 1 (How much money each merch item made across every night)
-            cursor.execute("SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales)*100 as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;")
+            qry13="SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales)*100 as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;"
+            cursor.execute(qry13)
             result13 = cursor.fetchall()
+            new_result13=convert_data(result13)
             
             # Gender Pie Chart 2 (How much money each merch item made in night 1)
-            cursor.execute("SELECT Final.GENDER as GENDER, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-7')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-7') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC) Final;")
+            qry14="SELECT Final.GENDER as GENDER, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-7')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-7') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC) Final;"
+            cursor.execute(qry14)
             result14 = cursor.fetchall()
+            new_result14=convert_data(result14)
 
             # Gender Pie Chart 3 (How much money each merch item made in night 2)
-            cursor.execute("SELECT Final.GENDER as GENDER, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-10')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-10') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC) Final;")
+            qry15="SELECT Final.GENDER as GENDER, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-10')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-10') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC) Final;"
+            cursor.execute(qry15)
             result15 = cursor.fetchall()
+            new_result15=convert_data(result15)
             
             # Gender Pie Chart 4 (How much money each merch item made in night 3)
-            cursor.execute("SELECT Final.GENDER as GENDER, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-16')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-16') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC) Final;")
+            qry16="SELECT Final.GENDER as GENDER, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.GENDER as GENDER, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-16')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-16') New GROUP BY New.GENDER ORDER BY TOTAL_MONEY_RAISED DESC) Final;"
+            cursor.execute(qry16)
             result16 = cursor.fetchall()
+            new_result16=convert_data(result16)
             
             # Category Bar Chart 1 (How much money each merch item made across every night)
-            cursor.execute("SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE) New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC;")
+            qry17="SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE) New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC;"
+            cursor.execute(qry17)
             result17 = cursor.fetchall()
+            new_result17=convert_data(result17)
             
             # Category Bar Chart 2 (How much money each merch item made in night 1)
-            cursor.execute("SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-7') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC;")
+            qry18="SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-7') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC;"
+            cursor.execute(qry18)
             result18 = cursor.fetchall()
+            new_result18=convert_data(result18)
             
             # Category Bar Chart 3 (How much money each merch item made in night 2)
-            cursor.execute("SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-10') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC;")
+            qry19="SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-10') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC;"
+            cursor.execute(qry19)
             result19 = cursor.fetchall()
+            new_result19=convert_data(result19)
             
             # Category Bar Chart 4 (How much money each merch item made in night 3)
-            cursor.execute("SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-16') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC;")
+            qry20="SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-16') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC;"
+            cursor.execute(qry20)
             result20 = cursor.fetchall()
+            new_result20=convert_data(result20)
 
             # Category Pie Chart 1 (How much money each merch item made across every night)
-            cursor.execute("SELECT Final.CATEGORY as CATEGORY, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales)*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE) New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC) Final;")
+            qry21="SELECT Final.CATEGORY as CATEGORY, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales)*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE) New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC) Final;"
+            cursor.execute(qry21)
             result21 = cursor.fetchall()
+            new_result21=convert_data(result21)
             
             # Category Pie Chart 2 (How much money each merch item made in night 1)
-            cursor.execute("SELECT Final.CATEGORY as CATEGORY, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-7')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-7') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC) Final;")
+            qry22="SELECT Final.CATEGORY as CATEGORY, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-7')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-7') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC) Final;"
+            cursor.execute(qry22)
             result22 = cursor.fetchall()
+            new_result22=convert_data(result22)
             
             # Category Pie Chart 3 (How much money each merch item made in night 2)
-            cursor.execute("SELECT Final.CATEGORY as CATEGORY, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-10')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-10') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC) Final;")
+            qry23="SELECT Final.CATEGORY as CATEGORY, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-10')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-10') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC) Final;"
+            cursor.execute(qry23)
             result23 = cursor.fetchall()
+            new_result23=convert_data(result23)
             
             # Category Pie Chart 4 (How much money each merch item made in night 3)
-            cursor.execute("SELECT Final.CATEGORY as CATEGORY, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-16')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-16') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC) Final;")
+            qry24 = "SELECT Final.CATEGORY as CATEGORY, ROUND(Final.TOTAL_MONEY_RAISED, 2) FROM (SELECT New.CATEGORY as CATEGORY, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales WHERE DATE_SOLD = '2022-11-16')*100 as TOTAL_MONEY_RAISED from (select Sales.ITEM_ID, Sales.SIZE, Sales.PRICE, Sales.QUANTITY_SOLD, Sales.DATE_SOLD, Merch.CATEGORY, Merch.SUB_CATEGORY, Merch.GENDER from Sales, Merch WHERE Sales.ITEM_ID = Merch.ITEM_ID AND Sales.SIZE = Merch.SIZE AND Sales.DATE_SOLD = '2022-11-16') New GROUP BY New.CATEGORY ORDER BY TOTAL_MONEY_RAISED DESC) Final;"
+            cursor.execute(qry24)
             result24 = cursor.fetchall()
+            new_result24=convert_data(result24)
 
     response_body = {
         "status" : "success",
-        "bar chart data1": result1,
-        "bar chart data2": result2,
-        "bar chart data3": result3,
-        "bar chart data4": result4,
-        "pie chart data5": result5,
-        "pie chart data6": result6,
-        "pie chart data7": result7,
-        "pie chart data8": result8,
-        "gender bar chart1": result9,
-        "gender bar chart2": result10,
-        "gender bar chart3": result11,
-        "gender bar chart4": result12,
-        "gender pie chart1": result13,
-        "gender pie chart2": result14,
-        "gender pie chart3": result15,
-        "gender pie chart4": result16,
-        "category bar chart1": result17,
-        "category bar chart2": result18,
-        "category bar chart3": result19,
-        "category bar chart4": result20,
-        "category pie chart1": result21,
-        "category pie chart2": result22,
-        "category pie chart3": result23,
-        "category pie chart4": result24,
+        "bar chart data1": new_result1,
+        "bar chart data2": new_result2,
+        "bar chart data3": new_result3,
+        "bar chart data4": new_result4,
+        "pie chart data5": new_result5,
+        "pie chart data6": new_result6,
+        "pie chart data7": new_result7,
+        "pie chart data8": new_result8,
+        "gender bar chart1": new_result9,
+        "gender bar chart2": new_result10,
+        "gender bar chart3": new_result11,
+        "gender bar chart4": new_result12,
+        "gender pie chart1": new_result13,
+        "gender pie chart2": new_result14,
+        "gender pie chart3": new_result15,
+        "gender pie chart4": new_result16,
+        "category bar chart1": new_result17,
+        "category bar chart2": new_result18,
+        "category bar chart3": new_result19,
+        "category bar chart4": new_result20,
+        "category pie chart1": new_result21,
+        "category pie chart2": new_result22,
+        "category pie chart3": new_result23,
+        "category pie chart4": new_result24,
     }
 
     return response_body
+
+
 
 @app.route("/newanalytics")
 def return_new_data():
@@ -247,7 +304,7 @@ def return_new_data():
             query1 = "SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;"
             result1 = cursor.execute(query1)
             result1 = cursor.fetchall()
-            
-    result_dict = {col1:(col2, col3) for (col1, col2, col3, col4, col5) in cursor.fetchall()}
+    
+    
 
-    return result_dict
+    return new_result1
