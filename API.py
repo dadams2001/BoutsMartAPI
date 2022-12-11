@@ -120,7 +120,7 @@ def return_data():
             cursor.execute(qry1)
             result1 = cursor.fetchall()
             new_result1=convert_data(result1)
-            
+           
             # Bar Chart 2 (How much money each merch item made in night 1)
             qry2="SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD) as TOTAL_MONEY_RAISED FROM Sales WHERE DATE_SOLD = '2022-11-7' GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10;"
             cursor.execute(qry2)
@@ -138,7 +138,7 @@ def return_data():
             cursor.execute(qry4)
             result4 = cursor.fetchall()
             new_result4=convert_data(result4)
-            
+
             # Pie Chart 1 (How much money each merch item made across every night)
             qry5="SELECT New.ITEM_ID, ROUND(New.TOTAL_MONEY_RAISED, 2) FROM (SELECT ITEM_ID, SUM(PRICE*QUANTITY_SOLD)/(select SUM(PRICE*QUANTITY_SOLD) FROM Sales)*100 as TOTAL_MONEY_RAISED FROM Sales GROUP BY ITEM_ID ORDER BY TOTAL_MONEY_RAISED DESC LIMIT 10) New;"
             cursor.execute(qry5)
@@ -261,30 +261,30 @@ def return_data():
 
     response_body = {
         "status" : "success",
-        "bar chart data1": new_result1,
-        "bar chart data2": new_result2,
-        "bar chart data3": new_result3,
-        "bar chart data4": new_result4,
-        "pie chart data5": new_result5,
-        "pie chart data6": new_result6,
-        "pie chart data7": new_result7,
-        "pie chart data8": new_result8,
-        "gender bar chart1": new_result9,
-        "gender bar chart2": new_result10,
-        "gender bar chart3": new_result11,
-        "gender bar chart4": new_result12,
-        "gender pie chart1": new_result13,
-        "gender pie chart2": new_result14,
-        "gender pie chart3": new_result15,
-        "gender pie chart4": new_result16,
-        "category bar chart1": new_result17,
-        "category bar chart2": new_result18,
-        "category bar chart3": new_result19,
-        "category bar chart4": new_result20,
-        "category pie chart1": new_result21,
-        "category pie chart2": new_result22,
-        "category pie chart3": new_result23,
-        "category pie chart4": new_result24,
+        "bar_chart_data1": new_result1,
+        "bar_chart_data2": new_result2,
+        "bar_chart_data3": new_result3,
+        "bar_chart_data4": new_result4,
+        "pie_chart_data5": new_result5,
+        "pie_chart_data6": new_result6,
+        "pie_chart_data7": new_result7,
+        "pie_chart_data8": new_result8,
+        "gender_bar_chart1": new_result9,
+        "gender_bar_chart2": new_result10,
+        "gender_bar_chart3": new_result11,
+        "gender_bar_chart4": new_result12,
+        "gender_pie_chart1": new_result13,
+        "gender_pie_chart2": new_result14,
+        "gender_pie_chart3": new_result15,
+        "gender_pie_chart4": new_result16,
+        "category_bar_chart1": new_result17,
+        "category_bar_chart2": new_result18,
+        "category_bar_chart3": new_result19,
+        "category_bar_chart4": new_result20,
+        "category_pie_chart1": new_result21,
+        "category_pie_chart2": new_result22,
+        "category_pie_chart3": new_result23,
+        "category_pie_chart4": new_result24,
     }
 
     return response_body
