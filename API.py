@@ -111,78 +111,78 @@ def AddItem():
                                 user='msilvest',
                                 password='pwpwpwpw',
                                 database='msilvest')
-        
-        with connection.cursor() as cursor:
-            New_Item_ID = vars["prod_id"]
-            New_Item_Cat = vars["category"]
-            New_Item_Price = vars["price"]
-            New_Item_Sub_Cat = vars["sub_cat"]
-            New_Item_Color = vars["color"]
-            New_Item_Gender = vars["gender"]
-            New_Item_XS_Quantity = vars["XS_quantity"]
-            New_Item_S_Quantity = vars["S_quantity"]
-            New_Item_M_Quantity = vars["M_quantity"]
-            New_Item_L_Quantity = vars["L_quantity"]
-            New_Item_XL_Quantity = vars["XL_quantity"]
-            New_Item_XXL_Quantity = vars["XXL_quantity"]
-            New_Item_XXXL_Quantity = vars["XXXL_quantity"]
-            New_Item_OS_Quantity = vars["OS_quantity"]
-            New_Item_Box = vars["box"]
-            New_Item_Shelf = vars["shelf"]
-            New_Item_Location = vars["location"]
-            New_Item_Disc = 0
+        with connection: 
+            with connection.cursor() as cursor:
+                '''New_Item_ID = vars["prod_id"]'''
+                New_Item_Cat = vars["category"]
+                New_Item_Price = vars["price"]
+                New_Item_Sub_Cat = vars["sub_cat"]
+                New_Item_Color = vars["color"]
+                New_Item_Gender = vars["gender"]
+                New_Item_XS_Quantity = vars["XS_quantity"]
+                New_Item_S_Quantity = vars["S_quantity"]
+                New_Item_M_Quantity = vars["M_quantity"]
+                New_Item_L_Quantity = vars["L_quantity"]
+                New_Item_XL_Quantity = vars["XL_quantity"]
+                New_Item_XXL_Quantity = vars["XXL_quantity"]
+                New_Item_XXXL_Quantity = vars["XXXL_quantity"]
+                New_Item_OS_Quantity = vars["OS_quantity"]
+                New_Item_Box = vars["box"]
+                New_Item_Shelf = vars["shelf"]
+                New_Item_Location = vars["location"]
+                New_Item_Disc = 0
 
-            # get the current max item number
-            query = "SELECT max(ITEM_ID) FROM Merch_Test"
-            cursor.execute(query)
-            Max_Item_ID = cursor.fetchone()
+                # get the current max item number
+                query = "SELECT max(ITEM_ID) FROM Merch"
+                cursor.execute(query)
+                Max_Item_ID = cursor.fetchone()
 
-            # check if the item is an accessory 
-            if New_Item_Cat == "ACCESSORIES":
-                New_Item_Size = 'OS'
-                sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}', '{New_Item_OS_Quantity}', '{New_Item_Box}', '{New_Item_Shelf}',  '{New_Item_Location}')"
-                cursor.execute(sql_add_item)
+                # check if the item is an accessory 
+                if New_Item_Cat == "ACCESSORIES":
+                    New_Item_Size = 'OS'
+                    sql_add_item = f"INSERT INTO Merch (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}', '{New_Item_OS_Quantity}', '{New_Item_Box}', '{New_Item_Shelf}',  '{New_Item_Location}')"
+                    cursor.execute(sql_add_item)
 
-            # create query for each size if the item is not an accessory
-            else:
+                # create query for each size if the item is not an accessory
+                else:
                 
-                # insert XS quantity
-                New_Item_Size = "XS"
-                sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_XS_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
-                cursor.execute(sql_add_item)
+                    # insert XS quantity
+                    New_Item_Size = "XS"
+                    sql_add_item = f"INSERT INTO Merch (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_XS_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
+                    cursor.execute(sql_add_item)
 
-                # insert S quantity 
-                New_Item_Size = "S"
-                sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_S_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
-                cursor.execute(sql_add_item)
+                    # insert S quantity 
+                    New_Item_Size = "S"
+                    sql_add_item = f"INSERT INTO Merch (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_S_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
+                    cursor.execute(sql_add_item)
 
-                # insert M quantity
-                New_Item_Size = "M"
-                sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_M_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
-                cursor.execute(sql_add_item)
+                    # insert M quantity
+                    New_Item_Size = "M"
+                    sql_add_item = f"INSERT INTO Merch (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_M_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
+                    cursor.execute(sql_add_item)
 
-                # insert L quantity
-                New_Item_Size = "L"
-                sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_L_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
-                cursor.execute(sql_add_item)
+                    # insert L quantity
+                    New_Item_Size = "L"
+                    sql_add_item = f"INSERT INTO Merch (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_L_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
+                    cursor.execute(sql_add_item)
 
-                # insert XL quantity
-                New_Item_Size = "XL"
-                sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_XL_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
-                cursor.execute(sql_add_item)
+                    # insert XL quantity
+                    New_Item_Size = "XL"
+                    sql_add_item = f"INSERT INTO Merch (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_XL_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
+                    cursor.execute(sql_add_item)
 
-                # insert XXL quantity
-                New_Item_Size = "XXL"
-                sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_XXL_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
-                cursor.execute(sql_add_item)
+                    # insert XXL quantity
+                    New_Item_Size = "XXL"
+                    sql_add_item = f"INSERT INTO Merch (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_XXL_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
+                    cursor.execute(sql_add_item)
 
-                # insert XXXL quantity 
-                New_Item_Size = "XXXL"
-                sql_add_item = f"INSERT INTO Merch_Test (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_XXXL_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
-                cursor.execute(sql_add_item)
+                    # insert XXXL quantity 
+                    New_Item_Size = "XXXL"
+                    sql_add_item = f"INSERT INTO Merch (ITEM_ID, SIZE, CATEGORY, PRICE, SUB_CATEGORY, DISCONTINUED, COLOR, GENDER, QUANTITY, BOX, SHELF, LOCATION) VALUES ('{Max_Item_ID[0] + 1}', '{New_Item_Size}', '{New_Item_Cat}', '{New_Item_Price}', '{New_Item_Sub_Cat}', '{New_Item_Disc}', '{New_Item_Color}',  '{New_Item_Gender}',  '{New_Item_XXXL_Quantity}',  '{New_Item_Box}',  '{New_Item_Shelf}',  '{New_Item_Location}')" 
+                    cursor.execute(sql_add_item)
 
-        response = "we did it chief"
-        connection.commit()
+            response = "we did it chief"
+            connection.commit()
     
     elif (request.method=="GET"):
         response="we got it"
@@ -194,7 +194,6 @@ def AddItem():
     }
 
     return response_body 
-
 
 def convert_data(data_list):
     keys = ['name', 'value']
