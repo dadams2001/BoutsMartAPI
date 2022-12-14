@@ -1,2 +1,2 @@
 #! /bin/sh
-flask --app API run -h 0.0.0.0 -p 5008
+flask --app API run -h 0.0.0.0 -p 5012
